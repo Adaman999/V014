@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Welcome • 5410 15th Ave, Columbus, GA 31904</title>
+  <style>
+    :root{
+      --bg:#0f172a;        /* slate-900 */
+      --panel:#0b1220;     /* deep panel */
+      --glass:#111827cc;   /* header glass */
+      --border:#71809633;  /* subtle border */
+      --text:#e5e7eb;      /* gray-200 */
+      --muted:#94a3b8;     /* slate-400 */
+      --accent:rgba(96,165,250,.18);
+      --overscan:20px;     /* cushion so TVs don't clip edges */
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    /* ===== TV-first base ===== */
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      font-size:19px;     /* tuned so House Rules fit without scrolling at 1080p */
+      line-height:1.45;   /* a bit tighter than default */
+      display:flex;
+      min-height:100dvh;
+      overflow:hidden;    /* avoid page scrollbars on the TV */
+    }
+
+    /* Full-screen shell with overscan padding */
+    .wrap{
+      display:flex;
+      flex-direction:column;
+      width:100%;
+      height:100%;
+      padding:var(--overscan);
+      gap:14px;
+    }
+
+    header{
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:18px 24px;
+      text-align:center;
+    }
+    h1{margin:0 0 4px; font-size:clamp(30px,3.1vw,44px)}
+    header p{margin:0; color:var(--muted); font-size:clamp(15px,1.3vw,20px)}
+
+    /* Main layout for 1920×1080 TV
+       Put more vertical space into row 1 where House Rules live */
+    main{
+      display:grid;
+      grid-template-columns: 1.08fr 0.92fr; /* left > right */
+      grid-template-rows: auto 1fr;         /* top auto (rules), bottom flexible */
+      gap:14px;
+      height:100%;
+      min-height:0;
+    }
+
+    .card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+    }
+    .card h2{margin:0 0 8px; font-size:clamp(19px,1.8vw,24px)}
+
+    /* Generic inner scroller (apply only where we want scrolling) */
+    .scroll{
+      overflow:auto;
+      padding-right:6px;
+    }
+
+    /* ===== House Rules: NO SCROLLING ===== */
+    #house-rules .content{
+      /* no overflow here so the whole list is in view */
+      overflow:visible;
+    }
+    /* tighten list spacing so everything fits comfortably */
+    #house-rules ul{
+      margin:6px 0 0 18px;
+      padding:0;
+    }
+    #house-rules li{
+      margin:2px 0;       /* tighter vertical rhythm */
+    }
+
+    /* Wi‑Fi block */
+    .wifi{
+      display:grid;
+      grid-template-columns:210px 1fr;
+      gap:16px;
+      align-items:center;
+    }
+    .qr{
+      background:#fff;
+      padding:8px;
+      border-radius:12px;
+      display:inline-block;
+    }
+    .mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+
+    footer{
+      text-align:center;
+      color:var(--muted);
+      font-size:16px;
+      padding:6px 10px 2px;
+    }
+
+    /* ===== Big-TV tuning (≥1600px) ===== */
+    @media (min-width:1600px){
+      body{font-size:20px}
+      .wifi{grid-template-columns:220px 1fr}
+    }
+
+    /* Fallback for smaller screens (dev laptops, etc.) */
+    @media (max-width:1200px){
+      main{
+        grid-template-columns:1fr;
+        grid-template-rows:auto auto auto;
+        overflow:auto; /* allow page scroll when not on TV */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Welcome!</h1>
+      <p>5410 15th Ave, Columbus, GA 31904 • Review the house rules, check the local forecast, and connect to Wi‑Fi.</p>
+    </header>
+
+    <main>
+      <!-- Row 1, LEFT: 7‑Day Weather (this card may scroll internally if tall) -->
+      <section class="card" id="weather" aria-live="polite" style="grid-column:1; grid-row:1;">
+        <h2>Columbus, GA — 7‑Day Forecast</h2>
+        <div class="scroll">
+          <!-- WeatherWidget.io embed element (their script replaces this with the widget UI) -->
+          <a class="weatherwidget-io"
+             href="https://forecast7.com/en/32d46n84d99/columbus/?unit=us"
+             data-theme="original"
+             data-mode="Forecast"
+             data-days="7"
+             data-font="System UI"
+             data-label_1="COLUMBUS"
+             data-label_2="7‑DAY FORECAST">Columbus — 7‑Day Forecast</a>
+          <noscript><p>Enable JavaScript to view the weather forecast.</p></noscript>
+        </div>
+      </section>
+
+      <!-- Row 1, RIGHT: House Rules (no scrolling) -->
+      <section class="card" id="house-rules" style="grid-column:2; grid-row:1;">
+        <h2>House Rules</h2>
+        <div class="content" style="line-height:1.45">
+          <p style="margin:0 0 6px 0">Please take a moment to read these quick guidelines:</p>
+          <ul>
+            <li>Quiet hours: 10:00 PM – 7:00 AM</li>
+            <li>No smoking or vaping inside the unit</li>
+            <li>Pets only with prior approval</li>
+            <li>Trash &amp; recycling: take to the street at checkout</li>
+            <li>Check‑out: load &amp; start the dishwasher, place used towels in the laundry</li>
+          </ul>
+          <p style="margin:8px 0 0 0"><strong>Need anything?</strong> Text us at <span class="mono">(517) 898‑2130</span> and we’ll help right away.</p>
+        </div>
+      </section>
+
+      <!-- Row 2, LEFT: Local Info (optional; scrolls if long) -->
+      <section class="card" style="grid-column:1; grid-row:2;">
+        <h2>Local Info</h2>
+        <div class="scroll">
+          <p>Welcome to Columbus! Restaurants, parks, and tips can go here.</p>
+        </div>
+      </section>
+
+      <!-- Row 2, RIGHT: Wi‑Fi (QR generation removed; just shows details) -->
+      <section class="card" id="wifi" style="grid-column:2; grid-row:2;">
+        <h2>Wi‑Fi Access</h2>
+        <div class="wifi">
+          <!-- Removed dynamic QR content -->
+          <div class="qr" aria-hidden="true" style="display:none"></div>
+
+          <div>
+            <p class="mono"><strong>Network Name (SSID):</strong> 5410 Unit 2B</p>
+            <p class="mono"><strong>Passkey:</strong> abounds123</p>
+            <p class="mono"><strong>Security:</strong> WPA/WPA2</p>
+            
+          </div>
+        </div>
+
+        <!-- Optional: remove this <noscript> if you don't want any QR at all -->
+        <noscript>
+          <p>
+            <img alt="Wi‑Fi QR (static)"
+                 src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&amp;data=WIFI%3AT%3AWPA%3BS%3A5410%20Unit%202B%3BP%3Aabounds123%3BH%3Afalse%3B%3B"
+                 width="220" height="220">
+          </p>
+        </noscript>
+      </section>
+    </main>
+
+    <footer>© 2026 Welcome Page</footer>
+  </div>
+
+  <!-- Weather widget loader (replaces the anchor with the widget UI) -->
+  <script>
+    (function(d,s,id){
+      var js,fjs=d.getElementsByTagName(s)[0];
+      if(!d.getElementById(id)){
+        js=d.createElement(s); js.id=id;
+        js.src='https://weatherwidget.io/js/widget.min.js';
+        fjs.parentNode.insertBefore(js,fjs);
+      }
+    })(document,'script','weatherwidget-io-js');
+  </script>
+</body>
+</html>
